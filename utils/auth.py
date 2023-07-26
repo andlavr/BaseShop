@@ -29,31 +29,7 @@ class RegistrationManager:
 class AuthManager:
 
     def __init__(self) -> None:
-
-        # check_password(password)
-
         self.__db = db["users"]
-
-    #
-    # @property
-    # def password(self) -> str:
-    #     """
-    #     Получение пароля пользователя в хэшированном виде
-    #
-    #     :return: хэш
-    #     """
-    #
-    #     return hashlib.sha256(self.__password.encode()).hexdigest()
-    #
-    # def get(self) -> str:
-    #     """
-    #     Получение пароля пользователя в хэшированном виде
-    #
-    #     :return: хэш
-    #     """
-    #
-    #     user_pass_hash = hashlib.sha256(self.__password.encode()).hexdigest()
-    #     return user_pass_hash
 
     def check(self, login, password) -> bool:
         """
