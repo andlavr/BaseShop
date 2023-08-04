@@ -27,7 +27,7 @@ class BaseGenerator:
             return None
 
         name = f"{random.choice(self.base).title()} '{self.faker.word().title()}'"
-        return Product(name, random.randint(min_price, max_price), round(random.uniform(0, 5), 2))
+        return Product(name, random.randint(min_price, max_price), round(random.uniform(0.1, 5), 2))
 
     def get_products(self, min_price, max_price, count) -> typing.List[Product]:
         """

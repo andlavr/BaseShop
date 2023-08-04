@@ -5,13 +5,16 @@ from utils.errors import ProductError, ProductsListTypeError
 
 
 class Category:
-    def __init__(self, name, products: typing.Union[Product, None] = None):
+    def __init__(self, name: str, products: typing.Union[Product, None] = None):
         self.__name = name
 
         if products is not None:
             self.__products = products
         else:
             self.__products = []
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(name={self.name}, products={self.products})"
 
     @property
     def name(self):

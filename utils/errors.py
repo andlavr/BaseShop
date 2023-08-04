@@ -56,3 +56,9 @@ class ShopNameError(Exception):
 
 class RegistrationError(Exception):
     pass
+
+class CategoryTypeError(Exception):
+    pass
+
+class UserWrongChooseError(Exception):
+    pass
