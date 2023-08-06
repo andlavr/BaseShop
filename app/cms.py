@@ -35,7 +35,12 @@ class CategoryManager:
 
 
     @property
-    def categories(self):
+    def categories(self) -> typing.List[Category]:
+        """
+        Получение категорий
+
+        :return: список категорий
+        """
         return self.__categories
 
     def add_category(self, category: Category) -> None:
@@ -51,7 +56,15 @@ class CategoryManager:
         self.__categories.append(category)
 
 
-    def create_category(self, name, products_type, count):
+    def create_category(self, name: str, products_type: str, count: int) -> None:
+        """
+        Создание категорий по выбранному типу товаров
+
+        :param name: название категории
+        :param products_type: тип продукта
+        :param count: int
+        :return: None
+        """
         if not isinstance(name, str):
             raise TypeError(f'Ожидается тип str, получен {type(name)}')
 
@@ -69,12 +82,24 @@ class CategoryManager:
 
         self.add_category(category)
 
-    def check_category(self, category):
+
+    def check_category(self, category: Category) -> None:
+        """
+        Проверка типа данных Категория
+        :param category: объект класса Category
+        :return: None
+        """
         if not isinstance(category, Category):
             raise CategoryTypeError(f"Ожидается тип Category, передан {type(category)}!")
 
 
-    def del_category(self, name):
+    def del_category(self, name: str) -> None:
+        """
+        Удаление объекта типа Категория
+        :param name: название категории
+        :return: None
+        """
+
         for index, category in enumerate(self.__categories):
             if category.name == name:
                 self.__categories.remove(category)

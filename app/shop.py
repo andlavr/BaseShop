@@ -1,9 +1,11 @@
+import sys
+
 from app.category import Category
 from app.cms import category_manager
 from app.product import Product
 from app.user import User
 from utils.auth import AuthManager
-from utils.errors import WrongLogin, ShopNameError, RegistrationError
+from utils.errors import WrongLogin, ShopNameError, RegistrationError, WrongChooseCategory, WrongChooseProduct
 
 
 class Shop:
@@ -26,7 +28,7 @@ class Shop:
     @name.setter
     def name(self, value: str) -> None:
         """
-        Установка название магазина
+        Установка названия магазина
 
         :param value: str
         :return: None
@@ -46,8 +48,7 @@ class Shop:
 
         return self.__user
 
-    def __init_categories(
-            self) -> list:  # В идеале создавать продукты и категории не в самом магазине, а в отдельном классе получая из БД
+    def __init_categories(self) -> list:  # В идеале создавать продукты и категории не в самом магазине, а в отдельном классе получая из БД
         return category_manager.categories
 
     def __enter_to_web(self) -> str:
@@ -105,21 +106,12 @@ class Shop:
                 user_choose = int(input("Выберете номер интересующей вас категории товара от 1 до 8 ")) - 1
             except ValueError:
                 print("Введено не верное значение, выберите нужное из списка")
-                continue
-
-            print('Если вы зашли в неверную категорию то нажмите 11')
-            if user_choose == 11:
-                print(index, category.name)
 
             if user_choose in range(len(self.__categories)):
                 return self.__categories[user_choose]
 
             print("Введено не верное значение, выберите нужное из списка")
 
-    # def wrong_category(self, user_choose) -> Category:
-    #
-    #     if user_choose == 0:
-    #         print()
 
     def __choose_product(self, category: Category) -> Product:
         """
@@ -133,43 +125,102 @@ class Shop:
             for index, product in enumerate(category.products, 1):
                 print(index, product)
 
+            print("0 - назад (вернуться к выбору категории)")
+
             try:
                 user_choose = int(input("Выберете номер интересующего вас продукта: ")) - 1
             except ValueError:
                 print("Введено не верное значение, выберете нужное из списка")
                 continue
 
+            if user_choose == -1:
+                raise WrongChooseCategory
+
+
             if user_choose in range(len(category.products)):
-                return category.products[user_choose]
+                try:
+                    current_unit = int(input("Введите количество товара"))
+                except ValueError:
+                    print("Введено не верное значение, введите целое число!")
+                    continue
+
+                return category.products[user_choose], current_unit
 
             print("Введено не верное значение, выберите нужное из списка")
 
-    def __show_cart(self):
-        pass
+    def __show_cart(self) -> None:
+        """
+        Демонстрация корзины
 
-    def __buy_products(self):
-        pass
+        :return: None
+        """
 
-    def run(self):
+        print("Ваша корзина:")
+
+        self.user.cart.show()
+
+
+    def __buy_products(self) -> None:
+        """
+        Оплата продуктов в корзине
+
+        :return:  None
+        """
+        print('Продукты оплачены')
+        sys.exit(0)
+
+    def run(self) -> None:
+        """
+        Основной метод для работы приложения
+
+        :return: None
+        """
+
+        # TODO: 1. Предусмотреть возврат из категории если зашли не правильно  !OK
+        # TODO: 2. Возврат из продуктов, если зашел не правильно  !OK
+        # TODO: 3. Красивый вывод продуктов  !OK
+        # TODO: 4. Красивый вывод корзины !OK
+        # TODO: 5. Возможность выбора количества продукта (шт) !Ok
+
         self.__enter_to_web()
         self.__authentification_user()
 
         while True:
+
             category = self.__choose_categories()
-            product = self.__choose_product(category)
-            self.user.cart.add_product(product)
 
-    #TODO: 1. Предусмотреть возврат из категории если зашли не правильно
-    #TODO: 2. Возврат из продуктов, если зашел не правильно
-    #TODO: 3. Красивый вывод продуктов
-    #TODO: 4. Красивый вывод корзины
-    #TODO: 5. Возможность выбора количества продукта (шт)
+            try:   # здесь try используется чтобы вернуться в категорию
+                product, count = self.__choose_product(category)
+                for i in range(count):
+                    self.user.cart.add_product(product)
+            except WrongChooseCategory:
+                continue
 
-            print("Ваша корзина:")
-            print(self.user.cart.products)
 
-            # if self.user is None:
-            #     print("12312312")
+            while True:
+                print('Выберите дальнейшее действие:')
+                print('1 - показать корзину')
+                print('2 - продолжить покупки')
+                print('3 - оплатить товары')
 
-            input("12312")
-            print("Магазин запущен")
+                try:
+                    user_choose = int(input('Ваш выбор: '))
+                except ValueError:
+                    print("Выбрано не правильное действие!!!")
+                    continue
+
+
+                if user_choose == 1:
+                    self.__show_cart()
+                    break
+
+                elif user_choose == 2:
+                    break
+
+                elif user_choose == 3:
+                    self.__buy_products()
+                    break
+                else:
+                    print("Выбрано не правильное действие!!!")
+                    continue
+

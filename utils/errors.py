@@ -62,3 +62,10 @@ class CategoryTypeError(Exception):
 
 class UserWrongChooseError(Exception):
     pass
+
+class WrongChooseCategory(Exception):
+    pass
+
+class WrongChooseProduct(Exception):
+    pass
+

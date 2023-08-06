@@ -43,7 +43,7 @@ class Cart:
     @products.setter
     def products(self, value: typing.List[Product]) -> None:
         """
-        Устанавливает список продуктов
+        Установка списка продуктов
 
         :param value: список объектов типа Product
         :return: None
@@ -60,7 +60,7 @@ class Cart:
 
     def add_product(self, product: Product) -> None:
         """
-        Добавляет продукт в корзину
+        Добавление продукта в корзину
 
         :param product: объект типа Product
         :return: None
@@ -73,7 +73,7 @@ class Cart:
 
     def del_product(self, product: Product) -> None:
         """
-        Удаляет продукт из корзины
+        Удаление продукта из корзины
 
         :param product: объект типа Product
         :return: None
@@ -84,6 +84,22 @@ class Cart:
 
         self.__products.remove(product)
 
+    def show(self) -> None:
+        """
+        Красивый вывод корзины
+
+        :return: None
+        """
+        for product in self.products:
+            print(product)
+
+        sum_price = sum([product.price for product in self.__products])
+        print('_____________________________________________________________________________________________________')
+        print('Общая сумма покупок:'.ljust(70), sum_price, 'у.е.')
+        print('_____________________________________________________________________________________________________')
+
+        # print('Наименование', products.name)
+
 
 if __name__ == '__main__':
     cart = Cart()
@@ -91,15 +107,15 @@ if __name__ == '__main__':
     # print(cart)
     #
     item_product = Product(name='TV Gorizont', price=3000, rating=9.8)
-    print(item_product)
+    # print(item_product)
     item_product_2 = Product(name='Computer', price=300000, rating=10)
-    print(item_product_2)
+    # print(item_product_2)
     item_product_3 = Product(name='Картошка', price=60, rating=2.8)
-    print(item_product_3)
+    # print(item_product_3)
 
-    products = [item_product, item_product_2, item_product_3, 12312]
+    products = [item_product, item_product_2, item_product_3]
     cart_2 = Cart(products)
-    print(cart_2.products)
+    cart_2.show()
     #
     # cart.add_product(item_product)
     # print(cart)

@@ -18,21 +18,22 @@ class Product:
 
     def __repr__(self):
         """
-        Возвращает строку при помощи которой был создан объект
+        Возврат строки при помощи которой был создан объект
 
         :return: строка для __repr__
         """
 
         return f"{self.__class__.__name__}(name={self.__name!r}, price={self.__price}, rating={self.__rating})"
 
+
     def __str__(self):
         """
-        Возвращает читабельный вариант продукта
+        Возврат удобного для чтения варианта строки при помощи которой был создан объект
 
         :return: строка для __str__
         """
 
-        return f"id={self.__id}; name={self.__name}"
+        return f"Наименование: {self.__name.ljust(50)} цена: {str(self.__price).ljust(15)} рейтинг: {str(self.__rating)}"
 
     @property
     def id_(self) -> str:
@@ -82,16 +83,16 @@ class Product:
     @property
     def rating(self) -> typing.Union[float, int]:
         """
-        Получение рейтинг
+        Получение рейтинга
 
         :return: Объект типа rating
         """
         return self.__rating
 
     @rating.setter
-    def rating(self, rating):
+    def rating(self, rating) -> typing.Union[float, int]:
         """
-        Устанавливает рейтинг
+        Установка рейтинга
 
         :param rating: float, int
         :return: Объект типа rating

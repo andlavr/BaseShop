@@ -6,7 +6,7 @@ class IdCounter:
     @staticmethod
     def generate_id() -> str:
         """
-        Генерирует id продукта
+        Генерация id продукта
 
         :return: Объект типа id
         """
@@ -21,7 +21,7 @@ class UserIdCounter:
     @staticmethod
     def user_id_generator():
         """
-        Генерирует id пользователя
+        Генерация id пользователя
 
         :return: Объект типа id
         """

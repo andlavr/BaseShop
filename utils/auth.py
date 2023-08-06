@@ -7,13 +7,14 @@ from utils.errors import PasswordTooShortError, WrongLogin, RegistrationError
 from app.models import db
 
 
-def check_password(password):
+def is_good_password(password:str) -> str:
     """
     Проверка пароля
 
-    :param password:
-    :return: 
+    :param password: пароль для проверки
+    :return: ???
     """
+    # TODO: Переделать при реализации регистрации
 
     if len(password) < 8:
         raise PasswordTooShortError('Пароль слишком короткий')

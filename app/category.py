@@ -17,15 +17,31 @@ class Category:
         return f"{self.__class__.__name__}(name={self.name}, products={self.products})"
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """
+        Получение названия продукта
+
+        :return: объект типа str
+        """
         return self.__name
 
     @property
-    def products(self):
+    def products(self) -> list:
+        """
+        Получение списка продуктов
+
+        :return: объект типа list
+        """
         return self.__products
 
     @products.setter
-    def products(self, value):
+    def products(self, value: typing.List[Product]) -> None:
+        """
+        Установка списка продуктов
+
+        :param value: объект типа List
+        :return: None
+        """
 
         if not isinstance(value, list):
             raise ProductsListTypeError(f'Ожидается тип list, получен тип {type(value)}')
@@ -48,6 +64,8 @@ class Category:
             raise ProductError(f'Ожидается тип Product, получен тип {type(product)}')
 
         self.__products.append(product)
+
+
 
     def del_product(self, product: Product) -> None:
         """
