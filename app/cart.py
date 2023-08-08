@@ -1,6 +1,7 @@
-from app.product import Product
+import collections
 import typing
 
+from app.product import Product
 from utils.errors import ProductsListTypeError, ProductTypeError
 
 
@@ -90,15 +91,24 @@ class Cart:
 
         :return: None
         """
+
+        cart_count = collections.Counter([product.name for product in self.products])
+        result = []
+
         for product in self.products:
-            print(product)
+            if product.name not in result:
+                print(
+                    f"Наименование: {product.name.ljust(50)} "
+                    f"цена за ед.: {str(product.price).ljust(15)} "
+                    f"количество: {str(cart_count[product.name]).ljust(10)} "
+                    f"общая стоимость: {str(product.price * cart_count[product.name]).ljust(20)} "
+                    f"рейтинг: {str(product.rating)}")
+                result.append(product.name)
 
         sum_price = sum([product.price for product in self.__products])
-        print('_____________________________________________________________________________________________________')
-        print('Общая сумма покупок:'.ljust(70), sum_price, 'у.е.')
-        print('_____________________________________________________________________________________________________')
-
-        # print('Наименование', products.name)
+        print('_' * 180)
+        print('Общая сумма покупок:'.ljust(133), sum_price, 'у.е.')
+        print('_' * 180)
 
 
 if __name__ == '__main__':
@@ -111,9 +121,12 @@ if __name__ == '__main__':
     item_product_2 = Product(name='Computer', price=300000, rating=10)
     # print(item_product_2)
     item_product_3 = Product(name='Картошка', price=60, rating=2.8)
+    item_product_4 = Product(name='Картошка', price=60, rating=2.8)
+    item_product_5 = Product(name='Картошка', price=60, rating=2.8)
+    item_product_6 = Product(name='Картошка', price=60, rating=2.8)
     # print(item_product_3)
 
-    products = [item_product, item_product_2, item_product_3]
+    products = [item_product, item_product_2, item_product_3, item_product_4, item_product_5, item_product_6]
     cart_2 = Cart(products)
     cart_2.show()
     #

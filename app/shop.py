@@ -4,7 +4,7 @@ from app.category import Category
 from app.cms import category_manager
 from app.product import Product
 from app.user import User
-from utils.auth import AuthManager
+from utils.auth import AuthManager, RegistrationManager
 from utils.errors import WrongLogin, ShopNameError, RegistrationError, WrongChooseCategory, WrongChooseProduct
 
 
@@ -69,23 +69,19 @@ class Shop:
         auth_manager = AuthManager()
 
         while True:  # начинаем процедуру аутентификации
-            login = input("Введите логин: ")
             try:  # Если логин введен верно и он есть в БД, то проверяем только пароль
                 while True:  # Если пароль верный, то создаем пользователя, а иначе запрашиваем пароль еще раз
-                    password = input("Введите пароль: ")
-
-                    if auth_manager.check(login, password):
-                        self.__user = User(login, password)
+                    if auth_manager.authorization():
+                        self.__user = auth_manager.user
                         break
                     else:
                         print("Введен неверный пароль")
                         continue
                 break
-
             except RegistrationError:  # Если логин введен не верно и человек захотел зарегистрироваться, то:
-                # TODO: Передаём управление в RegistrationManager
-                print("Регистрация")
-                break
+                if RegistrationManager().registration():
+                    print("Вы зарегистрированы, пройдите авторизацию")
+                    continue
             except WrongLogin:  # Если логин введен не верно и пользователь хочет повторить ввод логина (т.е. человек уверен, что он уже зарегистрирован)
                 continue
 

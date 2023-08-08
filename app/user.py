@@ -9,7 +9,7 @@ from utils.errors import UsernameError, PasswordError
 
 class User:
     def __init__(self, username: str, password: str):
-        self.username = username
+        self.login = username
         self.password = password
         self.__cart = Cart()
         self.__id = next(UserIdCounter.user_id_generator())
@@ -33,7 +33,7 @@ class User:
         return f'Имя пользователя: {self.__username}'
 
     @property
-    def username(self) -> str:
+    def login(self) -> str:
         """
         Передача имени пользователя
 
@@ -42,8 +42,8 @@ class User:
 
         return self.__username
 
-    @username.setter
-    def username(self, value: str) -> None:
+    @login.setter
+    def login(self, value: str) -> None:
         """
         Установка имени пользователя
 
@@ -106,9 +106,10 @@ if __name__ == '__main__':
     # print(User.creat_cart(username='Вася'))
     test_user = User(username='Вася', password='12345')
     # test_user.cart.add_product()
-    test_user = User()
+    # test_user = User()
 
     print(repr(test_user))
     test_user_2 = User(username='Петя', password='12345')
     print(test_user_2)
+
     # print(test_user.create_username(username='Вася', users_list=[]))
