@@ -97,9 +97,8 @@ class User:
 
         :return: Объект типа str
         """
+
         return self.__id
-
-
 
 
 if __name__ == '__main__':

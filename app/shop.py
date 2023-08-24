@@ -33,22 +33,29 @@ class Shop:
         :param value: str
         :return: None
         """
+
         if not isinstance(value, str):
             raise ShopNameError(f"Ожидается тип str, получен тип {type(value)}")
 
         self.__name = value
 
     @property
-    def user(self) -> str:
+    def user(self) -> User:
         """
-        Получение usera
+        Получение объекта User
 
-        :return: str
+        :return: User
         """
 
         return self.__user
 
-    def __init_categories(self) -> list:  # В идеале создавать продукты и категории не в самом магазине, а в отдельном классе получая из БД
+    def __init_categories(self) -> list:
+        """
+        Инициализация категорий
+
+        :return: список категорий
+        """
+
         return category_manager.categories
 
     def __enter_to_web(self) -> str:
@@ -57,6 +64,7 @@ class Shop:
 
         :return: str
         """
+
         return f"Добро пожаловать в магазин '{self.name}'!"
 
     def __authentification_user(self) -> None:
@@ -85,8 +93,6 @@ class Shop:
             except WrongLogin:  # Если логин введен не верно и пользователь хочет повторить ввод логина (т.е. человек уверен, что он уже зарегистрирован)
                 continue
 
-    # TODO если нет логина и пароля, то регистрация нового пользователя (class User)
-
     def __choose_categories(self) -> Category:
         """
         Выбор категории продукта
@@ -99,7 +105,8 @@ class Shop:
                 print(index, category.name)
 
             try:
-                user_choose = int(input("Выберете номер интересующей вас категории товара от 1 до 8 ")) - 1
+                user_choose = int(
+                    input(f"Выберете номер интересующей вас категории товара от 1 до {len(self.__categories)}: ")) - 1
             except ValueError:
                 print("Введено не верное значение, выберите нужное из списка")
 
@@ -107,7 +114,6 @@ class Shop:
                 return self.__categories[user_choose]
 
             print("Введено не верное значение, выберите нужное из списка")
-
 
     def __choose_product(self, category: Category) -> Product:
         """
@@ -132,7 +138,6 @@ class Shop:
             if user_choose == -1:
                 raise WrongChooseCategory
 
-
             if user_choose in range(len(category.products)):
                 try:
                     current_unit = int(input("Введите количество товара"))
@@ -155,13 +160,13 @@ class Shop:
 
         self.user.cart.show()
 
-
     def __buy_products(self) -> None:
         """
         Оплата продуктов в корзине
 
         :return:  None
         """
+
         print('Продукты оплачены')
         sys.exit(0)
 
@@ -172,12 +177,6 @@ class Shop:
         :return: None
         """
 
-        # TODO: 1. Предусмотреть возврат из категории если зашли не правильно  !OK
-        # TODO: 2. Возврат из продуктов, если зашел не правильно  !OK
-        # TODO: 3. Красивый вывод продуктов  !OK
-        # TODO: 4. Красивый вывод корзины !OK
-        # TODO: 5. Возможность выбора количества продукта (шт) !Ok
-
         self.__enter_to_web()
         self.__authentification_user()
 
@@ -185,13 +184,12 @@ class Shop:
 
             category = self.__choose_categories()
 
-            try:   # здесь try используется чтобы вернуться в категорию
+            try:  # здесь try используется, чтобы вернуться в категорию
                 product, count = self.__choose_product(category)
                 for i in range(count):
                     self.user.cart.add_product(product)
             except WrongChooseCategory:
                 continue
-
 
             while True:
                 print('Выберите дальнейшее действие:')
@@ -204,7 +202,6 @@ class Shop:
                 except ValueError:
                     print("Выбрано не правильное действие!!!")
                     continue
-
 
                 if user_choose == 1:
                     self.__show_cart()
@@ -219,4 +216,3 @@ class Shop:
                 else:
                     print("Выбрано не правильное действие!!!")
                     continue
-

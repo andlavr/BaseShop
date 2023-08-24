@@ -1,35 +1,33 @@
 import hashlib
-import secrets
-import string
 import sys
 import typing
 
+from app.crud import users as users_crud
 from app.user import User
-from utils.errors import PasswordTooShortError, WrongLogin, RegistrationError
-from app.models import db
+from utils.errors import RegistrationError
 
 
-def is_good_password(password:str) -> str:
+def is_good_password(password: str) -> str:
     """
     Проверка пароля
 
     :param password: пароль для проверки
-    :return: ???
+    :return: объект типа str
     """
-    # TODO: Переделать при реализации регистрации
+
+    # TODO: Переделать в дальнейшем (добавить больше проверок)
 
     if len(password) < 8:
-        raise PasswordTooShortError('Пароль слишком короткий')
-    else:
-        if password.isalnum():
-            return password
+        return False
+    return True
 
 
 class RegistrationManager:
     def __init__(self):
-        self.__db = db["users"]
+        pass
 
-    def __login_is_free(self, login: str) -> bool:
+    @staticmethod
+    def __login_is_free(login: str) -> bool:
         """
         Проверка логина на существование
 
@@ -37,12 +35,12 @@ class RegistrationManager:
         :return: True - логин свободен, иначе False
         """
 
-        if login not in self.__db.keys():
+        if not users_crud.login_is_exists(login):
             return True
         return False
 
-
-    def __add_user(self, login: str, password: str) -> bool:
+    @staticmethod
+    def __add_user(login: str, password: str) -> bool:
         """
         Добавление нового пользователя в БД
 
@@ -51,7 +49,8 @@ class RegistrationManager:
         :return: True если пользователь добавлен в БД, иначе - False
         """
 
-        self.__db[login] = hashlib.sha256(password.encode()).hexdigest()
+        password = hashlib.sha256(password.encode()).hexdigest()
+        users_crud.add_user(login, password)
 
         return True
 
@@ -84,14 +83,20 @@ class RegistrationManager:
 class AuthManager:
 
     def __init__(self) -> None:
-        self.__db = db["users"]
         self.__user = None
 
     @property
     def user(self) -> typing.Union[User, None]:
+        """
+        Получение объекта типа User
+
+        :return: User
+        """
+
         return self.__user
 
-    def __login_is_exists(self, login) -> bool:
+    @staticmethod
+    def __login_is_exists(login: str) -> bool:
         """
         Проверка существования логина в БД
 
@@ -99,10 +104,9 @@ class AuthManager:
         :return:True - логин существует, иначе - False
         """
 
-        if login in self.__db.keys():
+        if users_crud.login_is_exists(login):
             return True
         return False
-
 
     def authorization(self) -> bool:
         """
@@ -137,14 +141,13 @@ class AuthManager:
                 elif user_choose == '2':
                     sys.exit()
 
-        db_password = self.__db[login]
+        db_password = users_crud.get_password(login)
         password = input("Введите пароль: ")
         if db_password == hashlib.sha256(password.encode()).hexdigest():
             self.__user = User(login, password)
             return True
         else:
             return False
-
 
 
 if __name__ == '__main__':

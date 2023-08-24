@@ -23,6 +23,7 @@ class Category:
 
         :return: объект типа str
         """
+
         return self.__name
 
     @property
@@ -32,6 +33,7 @@ class Category:
 
         :return: объект типа list
         """
+
         return self.__products
 
     @products.setter
@@ -65,8 +67,6 @@ class Category:
 
         self.__products.append(product)
 
-
-
     def del_product(self, product: Product) -> None:
         """
         Удаление объекта типа product из списка продуктов
@@ -85,8 +85,5 @@ if __name__ == '__main__':
     from utils import generators
 
     cat_1 = Category("Сосиски", generators.Sausage().get_products(100, 500, 20))
-
-    # for elem in generators.Sausage().get_products(100, 500, 20):
-    #     cat_1.add_product(elem)
 
     print(cat_1.products)

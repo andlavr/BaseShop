@@ -4,7 +4,6 @@ import typing
 from utils.errors import ProductNameError, PriceError, RatingError
 
 
-
 class Product:
     def __init__(self, name: str, price: typing.Union[float, int], rating: typing.Union[float, int]):
 
@@ -24,7 +23,6 @@ class Product:
         """
 
         return f"{self.__class__.__name__}(name={self.__name!r}, price={self.__price}, rating={self.__rating})"
-
 
     def __str__(self):
         """
@@ -52,6 +50,7 @@ class Product:
 
         :return: объект типа str
         """
+
         return self.__name
 
     @property
@@ -59,12 +58,13 @@ class Product:
         """
         Получение цены
 
-        :return: Объект типа str
+        :return: Объект типа price
         """
+
         return self.__price
 
     @price.setter
-    def price(self, price) -> typing.Union[float, int]:
+    def price(self, price: typing.Union[float, int]) -> None:
         """
         Установка цены
 
@@ -87,10 +87,11 @@ class Product:
 
         :return: Объект типа rating
         """
+
         return self.__rating
 
     @rating.setter
-    def rating(self, rating) -> typing.Union[float, int]:
+    def rating(self, rating: typing.Union[float, int]) -> None:
         """
         Установка рейтинга
 
@@ -105,8 +106,6 @@ class Product:
             raise RatingError('Ошибка - не верно указан  рейтинг (только цифры!)')
 
         self.__rating = rating
-
-
 
 
 if __name__ == '__main__':
